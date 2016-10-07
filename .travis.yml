@@ -24,7 +24,7 @@ install:
 script:
     - tox -e $TOX_ENV
 
-on_success:
+after_success:
     - codecov
 
 notifications:
