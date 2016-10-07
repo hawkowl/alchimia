@@ -7,3 +7,4 @@ ChangeLog
 .cache/
 .eggs/
 *~
+.coverage
