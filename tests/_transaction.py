@@ -5,7 +5,7 @@ from twisted.internet.defer import ensureDeferred
 from alchimia.context import Transaction
 
 from alchimia.engine import (
-    TwistedEngine, TwistedConnection, TwistedTransaction,
+    TwistedConnection
 )
 
 
