@@ -19,10 +19,13 @@ matrix:
       env: TOX_ENV=pep8
 
 install:
-    - pip install tox
+    - pip install tox codecov
 
 script:
     - tox -e $TOX_ENV
+
+on_success:
+    - codecov
 
 notifications:
     irc: "irc.freenode.org#alchimia"
