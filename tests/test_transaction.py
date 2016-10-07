@@ -1,24 +1,12 @@
-from .test_engine import create_engine
-
+import sys
 from twisted.trial import unittest
-from twisted.internet.defer import ensureDeferred
-from alchimia.context import Transaction
 
-from alchimia.engine import (
-    TwistedEngine, TwistedConnection, TwistedTransaction,
-)
+if sys.version_info >= (3, 5, 0):
+    from ._transaction import TransactionTestCases
+else:
+    class TransactionTestCases(unittest.TestCase):
+        def test_skip(self):
+            raise unittest.SkipTest("Not on < 3.5")
 
-class TransactionTestCases(unittest.TestCase):
 
-    def test_run(self):
-        engine = create_engine()
-
-        async def run():
-            async with Transaction(engine) as t:
-                self.assertIsInstance(t, TwistedConnection)
-                await engine.execute("CREATE TABLE mytable (id int)")
-
-            return await engine.table_names()
-
-        d = ensureDeferred(run())
-        assert self.successResultOf(d) == ['mytable']
+__all__ = ["TransactionTestCases"]
