@@ -69,5 +69,6 @@ Contents
 
     ddl
     api-reference
+    transactions
     limitations
     contributing
