@@ -11,15 +11,40 @@ from alchimia.engine import (
 
 class TransactionTestCases(unittest.TestCase):
 
-    def test_run(self):
+    def test_successful_run(self):
         engine = create_engine()
 
         async def run():
+            await engine.execute("CREATE TABLE mytable (id int)")
+
             async with Transaction(engine) as t:
                 self.assertIsInstance(t, TwistedConnection)
-                await engine.execute("CREATE TABLE mytable (id int)")
+                await t.execute("INSERT INTO mytable (id) VALUES (1)")
 
-            return await engine.table_names()
+            ex = await engine.execute("SELECT id FROM mytable")
+            return await ex.fetchall()
 
         d = ensureDeferred(run())
-        assert self.successResultOf(d) == ['mytable']
+        self.assertEqual(self.successResultOf(d), [(1,)])
+
+
+    def test_rollback_run(self):
+        engine = create_engine()
+
+        async def run():
+            await engine.execute("CREATE TABLE mytable (id int)")
+
+            try:
+                async with Transaction(engine) as t:
+                    self.assertIsInstance(t, TwistedConnection)
+                    await t.execute("INSERT INTO mytable (id) VALUES (1)")
+                    raise Exception("nope")
+            except Exception:
+                exp = True
+
+            self.assertTrue(exp)
+            ex = await engine.execute("SELECT id FROM mytable")
+            return await ex.fetchall()
+
+        d = ensureDeferred(run())
+        assert self.successResultOf(d) == []

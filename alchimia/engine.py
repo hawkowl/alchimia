@@ -126,6 +126,9 @@ class TwistedConnection(object):
     def in_transaction(self):
         return self._connection.in_transaction()
 
+    def execution_options(self, *args, **kwargs):
+        return self._connection.execution_options(*args, **kwargs)
+
 
 class TwistedTransaction(object):
     def __init__(self, transaction, cxn):

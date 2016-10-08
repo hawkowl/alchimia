@@ -1,5 +1,3 @@
-
-
 class Transaction(object):
     """
     A database transaction.
@@ -9,6 +7,7 @@ class Transaction(object):
 
     async def __aenter__(self):
         self.connection = await self._engine.connect()
+        self.connection.execution_options(autocommit=False)
         self._transaction = await self.connection.begin()
         return self.connection
 

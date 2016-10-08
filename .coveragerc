@@ -1,6 +1,7 @@
 [run]
 source =
        alchimia
+       tests
 branch = True
 
 [report]
