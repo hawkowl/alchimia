@@ -27,7 +27,6 @@ class TransactionTestCases(unittest.TestCase):
         d = ensureDeferred(run())
         self.assertEqual(self.successResultOf(d), [(1,)])
 
-
     def test_rollback_run(self):
         engine = create_engine()
 
